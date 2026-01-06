@@ -47,3 +47,21 @@ Can satellite imagery improve residential property price prediction when combine
 
 The project follows a multimodal machine learning pipeline:
 
+Property Location (Lat/Lng)
+           |
+    ┌──────┴──────┐
+    |             |
+    v             v
+Satellite API  Tabular Data
+    |          (sqft, beds, etc.)
+    v             |
+CNN Features      |
+(ResNet18)        |
+    |             |
+    └──────┬──────┘
+           |
+           v
+    Fusion Models
+           |
+           v
+   Price Prediction
