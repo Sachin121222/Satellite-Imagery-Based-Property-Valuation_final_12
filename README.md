@@ -122,7 +122,7 @@ flowchart TB
 
 ---
 
-### 4. Preprocessing
+### 4. 📂 Data & Preprocessing Details
 
 #### Tabular Data
 - Handle missing values using **median imputation** for numerical features.
@@ -133,6 +133,26 @@ flowchart TB
 #### Image Data
 - Resize images to **224 × 224** pixels.
 - Normalize pixel values according to the pretrained CNN requirements.
+
+---
+
+### Tabular Features (Examples)
+- `sqft_living`, `sqft_lot`
+- `bedrooms`, `bathrooms`
+- `condition`, `grade`
+- `year_built`
+- `lat`, `long`
+- `sqft_living15`, `sqft_lot15`
+- `waterfront`, `view`
+
+### Target Variable
+- Sale price (log-transformed during training)
+
+### Image Acquisition Notes
+- Satellite tiles collected at a consistent zoom level.
+- Mapping from `property_id → image_path` stored in CSV format.
+- Example images for **low-priced** and **high-priced** areas are included
+in the project report (`23116085_report.pdf`).
 
 ---
 
@@ -174,28 +194,6 @@ flowchart TB
 - Apply **Grad-CAM** to CNN feature maps.
 - Overlay heatmaps on satellite images to visualize regions influencing predictions.
 - Helps verify whether the model focuses on meaningful neighborhood features.
-
----
-
-## 📂 Data & Preprocessing Details
-
-### Tabular Features (Examples)
-- `sqft_living`, `sqft_lot`
-- `bedrooms`, `bathrooms`
-- `condition`, `grade`
-- `year_built`
-- `lat`, `long`
-- `sqft_living15`, `sqft_lot15`
-- `waterfront`, `view`
-
-### Target Variable
-- Sale price (log-transformed during training)
-
-### Image Acquisition Notes
-- Satellite tiles collected at a consistent zoom level.
-- Mapping from `property_id → image_path` stored in CSV format.
-- Example images for **low-priced** and **high-priced** areas are included
-in the project report (`23116085_report.pdf`).
 
 ---
 
