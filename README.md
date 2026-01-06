@@ -1,73 +1,85 @@
-# 🛰️ Satellite Imagery–Based Property Valuation
+# 🛰️ Satellite Imagery–Enhanced Property Valuation
 
 **CDC × Yhills Open Projects (2025–26)**  
-**Domain:** Data Science  
-**Tech Stack:** Python, PyTorch, Scikit-learn  
+**Project type:** Multimodal regression for residential property price prediction  
+**Author:** Sachin Meena  
+**Tech:** Python · PyTorch · scikit-learn
 
-A multimodal machine learning project that predicts residential property prices by combining **structured housing data** with **satellite imagery**. The project studies whether visual neighborhood context can complement traditional tabular features in real estate valuation.
+> This README documents the full project pipeline, experiments, and usage. It was produced with reference to the project report supplied with this repository. :contentReference[oaicite:0]{index=0}
 
 ---
 
-## 📌 Table of Contents
+## 📌 Table of contents
+
 - Overview  
-- Problem Statement  
-- Methodology  
-- Project Structure  
-- Models  
-- Results  
-- Model Explainability  
-- Setup  
-- Usage  
-- Limitations  
+- Problem statement  
+- Why satellite imagery?  
+- Pipeline (diagram + code block)  
+- Pipeline steps (detailed)  
+- Data & preprocessing (including image notes)  
+- Models implemented  
+- Results (metrics table)  
+- Explainability (Grad-CAM observations)  
+- Project layout (files & notebooks)  
+- Setup & installation  
+- How to run / execution order  
+- Producing predictions & outputs  
+- Limitations & future work  
+- Contributing & contact  
+- License
 
 ---
 
 ## 🔍 Overview
 
-Most automated property valuation systems rely on structured attributes such as living area, number of rooms, and location coordinates. However, neighborhood characteristics like green spaces, water proximity, and urban density are often not explicitly captured.
-
-This project integrates:
-- **Tabular property features** describing internal characteristics
-- **Satellite imagery** capturing external neighborhood context  
-
-The goal is to evaluate the impact of satellite imagery on property price prediction when used alongside traditional features.
+This project explores whether satellite imagery — providing neighborhood-level visual context — can improve residential property price prediction when combined with traditional tabular housing features (area, rooms, condition, etc.). The work implements three modelling strategies (tabular-only, image-only, multimodal fusion), evaluates them on standard metrics, and uses Grad-CAM to interpret image influence.
 
 ---
 
-## ❓ Problem Statement
+## ❓ Problem statement
 
-Traditional housing datasets lack sufficient environmental and neighborhood information, which can lead to inaccurate valuations.
+Standard property valuation models (AVMs) often rely on structured features but miss environmental neighborhood factors (green space, water access, road layout, density). The aim is to build a robust multimodal pipeline that:
 
-**Research Question:**  
-Can satellite imagery improve residential property price prediction when combined with structured housing data?
+- gathers satellite tiles for each property coordinate,
+- extracts visual embeddings with a pretrained CNN,
+- integrates image embeddings with structured data,
+- trains/evaluates models and interprets image influence.
+
+**Research question:** Can satellite imagery improve price prediction accuracy when fused with tabular features?
 
 ---
 
-## ⚙️ Methodology
+## 🛰️ Why satellite imagery?
 
-The project follows a multimodal machine learning pipeline:
+Satellite tiles can reveal:
+- proximity to water and coastlines  
+- green cover vs. built density  
+- road networks and accessibility  
+- urban layout and lot organization
 
+These cues are complementary to internal property attributes and can be especially useful where local amenities or environmental factors drive price differences.
+
+---
+
+## 🔁 Pipeline (visual + code-style)
+
+### Monospace pipeline (suitable for README)
+```text
 Property Location (Lat/Lng)
             |
      ┌──────┴──────┐
      |             |
      v             v
 Satellite API   Tabular Data
-     |        (sqft, beds, etc.)
+     |        (sqft, beds, year, etc.)
      v             |
-CNN Features      |
- (ResNet-18)      |
-     |             |
-     └──────┬──────┘
+ CNN Feature Extractor |
+    (ResNet-18, frozen)|
+     |                 |
+     └──────┬──────────┘
             |
             v
-     Fusion Models
+      Fusion Models
             |
             v
-    Price Prediction
-
-           v
-    Fusion Models
-           |
-           v
-   Price Prediction
+     Price Prediction
