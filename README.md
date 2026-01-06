@@ -58,6 +58,26 @@ Satellite tiles can reveal:
 These cues are complementary to internal property attributes and can be especially useful where local amenities or environmental factors drive price differences.
 
 ---
+Project Structure
+```text
+satellite-property-valuation/
+├── data/
+│   ├── raw/                    # Original datasets
+│   ├── processed/              # Cleaned data
+│   └── images/                 # Satellite images
+├── notebooks/
+│   ├── 1_preprocesssing.ipynb        # Data preparation
+│   ├── 2_model_tabular_data.ipynb        # Baseline model  
+│   ├── 3_model_image_only.ipynb          # CNN model
+│   ├── 4_model_fusion(image+tabular).ipynb         # Combined approach
+│   ├── 5_gradcam_application.ipynb             # Model interpretation
+│   └── 6_evaluation_and_prediction.ipynb           # Results analysis
+├── src/
+│   └── data_fetchers.py         # Image acquisition
+├── outputs/
+│   └── predictions.csv         # Final results
+└── README.md
+```
 
 ## 🔁 Pipeline (visual + code-style)
 
