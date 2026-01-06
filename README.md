@@ -240,24 +240,5 @@ in the project report (`23116085_report.pdf`).
 - **Early multimodal fusion** does not improve performance; simple feature concatenation likely introduces noise rather than complementary information.
 
 
----
-
-## 🔍 Model Explainability (Grad-CAM)
-
-To interpret the contribution of satellite imagery, **Grad-CAM** was applied to the convolutional layers of the CNN.
-
-### Observations
-- **High-value properties** activate regions corresponding to:
-  - Nearby water bodies  
-  - Dense tree cover and green spaces  
-  - Well-organized residential layouts  
-
-- **Lower-value properties** highlight:
-  - Tightly packed urban blocks  
-  - Industrial zones  
-  - Areas with limited greenery  
-
-### Interpretation
-The Grad-CAM visualizations suggest that satellite imagery encodes **semantically meaningful neighborhood cues**. Although these visual signals do not translate into improved RMSE under naive early fusion, they confirm that the CNN learns relevant environmental patterns.
 
 
