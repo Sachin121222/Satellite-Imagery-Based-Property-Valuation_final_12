@@ -46,7 +46,6 @@ Standard property valuation models (AVMs) often rely on structured features but 
 
 **Research question:** Can satellite imagery improve price prediction accuracy when fused with tabular features?
 
----
 
 ## 🛰️ Why satellite imagery?
 
@@ -133,8 +132,6 @@ flowchart TB
 #### Image Data
 - Resize images to **224 × 224** pixels.
 - Normalize pixel values according to the pretrained CNN requirements.
-
----
 
 ### Tabular Features (Examples)
 - `sqft_living`, `sqft_lot`
