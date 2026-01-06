@@ -220,4 +220,44 @@ in the project report (`23116085_report.pdf`).
 - **Architecture:** Tabular features + image embeddings → MLP
 - **Note:** Simple concatenation was used; more advanced fusion techniques
 (attention-based or late-fusion) are recommended for future work.
+## 📈 Results
+
+**Evaluation Metrics**
+- **RMSE** computed on the original price scale  
+- **R²** score to measure explained variance  
+
+### Model Performance
+
+| Model | RMSE | R² |
+|------|------:|----:|
+| Tabular-Only | 88,521.20 | 0.9376 |
+| Image-Only | 539,792.00 | -1.2756 |
+| Multimodal (Early Fusion) | 489,662.99 | -0.6775 |
+
+### Key Takeaways
+- **Tabular-only model** achieves the best performance, indicating that structured housing attributes provide the strongest predictive signal.
+- **Image-only model** captures some visual information but performs poorly in terms of raw price prediction accuracy.
+- **Early multimodal fusion** does not improve performance; simple feature concatenation likely introduces noise rather than complementary information.
+
+
+---
+
+## 🔍 Model Explainability (Grad-CAM)
+
+To interpret the contribution of satellite imagery, **Grad-CAM** was applied to the convolutional layers of the CNN.
+
+### Observations
+- **High-value properties** activate regions corresponding to:
+  - Nearby water bodies  
+  - Dense tree cover and green spaces  
+  - Well-organized residential layouts  
+
+- **Lower-value properties** highlight:
+  - Tightly packed urban blocks  
+  - Industrial zones  
+  - Areas with limited greenery  
+
+### Interpretation
+The Grad-CAM visualizations suggest that satellite imagery encodes **semantically meaningful neighborhood cues**. Although these visual signals do not translate into improved RMSE under naive early fusion, they confirm that the CNN learns relevant environmental patterns.
+
 
