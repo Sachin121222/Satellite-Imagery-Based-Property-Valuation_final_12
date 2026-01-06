@@ -94,84 +94,130 @@ flowchart TB
   F --> G[Price prediction]
 ```
 
-⚙ Pipeline steps (detailed)
+## ⚙️ Pipeline Steps (Detailed)
 
-Data ingestion
+### 1. Data Ingestion
+- Load the tabular housing dataset containing:
+  - Sale price (target)
+  - Property attributes such as `sqft_living`, `bedrooms`, `bathrooms`,
+    `year_built`, `latitude`, `longitude`, `waterfront`, `view`, etc.
 
-Load tabular dataset containing sale price and property features (sqft, bedrooms, bathrooms, year built, lat/long, waterfront, view, etc.).
+---
 
-Sampling & stratification
+### 2. Sampling & Stratification
+- Properties may be **stratified based on log(price)** to ensure satellite images
+  are collected across the full price distribution (low, medium, and high-value homes).
 
-Optionally stratify properties by log(price) to collect image tiles across full price distribution.
+---
 
-Satellite imagery acquisition
+### 3. Satellite Imagery Acquisition
+- For each property, satellite tiles are fetched using `(latitude, longitude)`
+  from a map provider (e.g., Mapbox, Google Static Maps).
+- Images are collected at a **fixed zoom level and resolution**.
+- Downloaded images are cached locally in:
+- Metadata such as zoom level and timestamp is stored alongside image paths.
 
-Given (lat, lon) fetch tiles at a fixed zoom/size from a provider (Mapbox, Google Static Maps, or other).
+> **Note:** Satellite images are excluded from version control due to
+> storage constraints and API usage limits.
 
-Cache images locally (data/images/) and store metadata (zoom, timestamp).
+---
 
-Note: images are excluded from repo due to size & API limits.
+### 4. Preprocessing
 
-Preprocessing
+#### Tabular Data
+- Handle missing values using **median imputation** for numerical features.
+- Apply **log transformation** to the target variable (price).
+- Scale numerical features using standardization.
+- Encode categorical variables using **one-hot** or **target encoding**.
 
-Tabular: impute, log-transform price target, scale numeric features, encode categoricals.
+#### Image Data
+- Resize images to **224 × 224** pixels.
+- Normalize pixel values according to the pretrained CNN requirements.
 
-Images: resize (224×224), normalize per pretrained network spec.
+---
 
-Feature extraction
+### 5. Feature Extraction
+- Use a pretrained **ResNet-18** model with the classification head removed.
+- Extract **512-dimensional image embeddings**.
+- CNN weights are initially **frozen** to reduce overfitting and computation cost.
 
-Use pretrained ResNet-18 (remove classification head) to get 512-d embeddings. Initially freeze weights.
+---
 
-Modeling
+### 6. Modeling
 
-Tabular-only: gradient boosting (LightGBM / XGBoost) on structured features.
+- **Tabular-only model**
+- Gradient boosting (LightGBM / XGBoost)
+- Uses only structured housing features
 
-Image-only: MLP on CNN embeddings.
+- **Image-only model**
+- MLP trained on CNN image embeddings
+- Evaluates predictive power of satellite imagery alone
 
-Multimodal (early-fusion): concatenate standardized tabular features + image embeddings → MLP regressor.
+- **Multimodal (Early Fusion)**
+- Concatenate standardized tabular features with image embeddings
+- Pass combined features through an MLP regressor
 
-Training & evaluation
+---
 
-Loss: MSE on log(price).
+### 7. Training & Evaluation
+- **Loss Function:** Mean Squared Error (MSE) on log(price)
+- **Evaluation Metrics:**
+- RMSE (converted back to original price scale)
+- R² score
+- **Validation Strategy:**
+- Holdout split or k-fold cross-validation
+- Spatial grouping recommended to reduce geographic leakage
 
-Metrics: RMSE (original price scale), R².
+---
 
-Validation: k-fold or holdout; consider spatial grouping to avoid leakage.
+### 8. Explainability
+- Apply **Grad-CAM** to CNN feature maps.
+- Overlay heatmaps on satellite images to visualize regions influencing predictions.
+- Helps verify whether the model focuses on meaningful neighborhood features.
 
-Explainability
+---
 
-Apply Grad-CAM to CNN activations and overlay heatmaps on tiles to inspect model attention.
+## 📂 Data & Preprocessing Details
 
-📂 Data & preprocessing
+### Tabular Features (Examples)
+- `sqft_living`, `sqft_lot`
+- `bedrooms`, `bathrooms`
+- `condition`, `grade`
+- `year_built`
+- `lat`, `long`
+- `sqft_living15`, `sqft_lot15`
+- `waterfront`, `view`
 
-Tabular features (examples): sqft_living, sqft_lot, bedrooms, bathrooms, condition, grade, year_built, lat, long, sqft_living15, sqft_lot15, waterfront, view.
+### Target Variable
+- Sale price (log-transformed during training)
 
-Target: sale price (log-transformed for modeling).
+### Image Acquisition Notes
+- Satellite tiles collected at a consistent zoom level.
+- Mapping from `property_id → image_path` stored in CSV format.
+- Example images for **low-priced** and **high-priced** areas are included
+in the project report (`23116085_report.pdf`).
 
-Image acquisition notes: collect tiles at consistent zoom; store mapping id → image_path in CSV.
+---
 
-Preprocessing specifics: missing numeric values — median imputation; categorical — one-hot or target encoding; standardize using training set statistics.
+## 🧪 Models Implemented
 
-(Report includes example images for low/high priced areas — see report visuals.) 
+### 1️⃣ Tabular Baseline
+- **Model:** Gradient Boosting Regressor
+- **Purpose:** Performance benchmark
+- **Observation:** Best performing approach
 
-23116085_report
+---
 
-🧪 Models implemented
+### 2️⃣ Image-Only Model
+- **Backbone:** Pretrained ResNet-18
+- **Architecture:** CNN embeddings → MLP
+- **Purpose:** Measure standalone predictive signal from imagery
 
-Tabular Baseline
+---
 
-Model: Gradient boosting regressor (preferred for tabular tasks).
+### 3️⃣ Multimodal Fusion Model
+- **Strategy:** Early fusion (feature concatenation)
+- **Architecture:** Tabular features + image embeddings → MLP
+- **Note:** Simple concatenation was used; more advanced fusion techniques
+(attention-based or late-fusion) are recommended for future work.
 
-Role: baseline benchmark.
-
-Image-Only
-
-Backbone: ResNet-18 (pretrained), embeddings → MLP.
-
-Purpose: measure visual signal alone.
-
-Multimodal Fusion
-
-Strategy: early fusion (concatenate tabular features + image embeddings) → MLP.
-
-Note: Simple concatenation was used; more advanced fusion (attention/late-fusion) is recommended for future work.
