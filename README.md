@@ -231,6 +231,22 @@ in the project report (`23116085_report.pdf`).
 - **Image-only model** captures some visual information but performs poorly in terms of raw price prediction accuracy.
 - **Early multimodal fusion** does not improve performance; simple feature concatenation likely introduces noise rather than complementary information.
 
+  ## 🛠️ Setup
+
+### Prerequisites
+- Python **3.8** or higher  
+- Git  
+
+---
+
+### Installation
+
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/satellite-property-valuation.git
+cd satellite-property-valuation
+
+
 
 
 
