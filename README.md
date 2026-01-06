@@ -5,7 +5,6 @@
 **Author:** Sachin Meena  
 **Tech:** Python · PyTorch · scikit-learn
 
-> This README documents the full project pipeline, experiments, and usage. It was produced with reference to the project report supplied with this repository. :contentReference[oaicite:0]{index=0}
 
 ---
 
@@ -83,3 +82,14 @@ Satellite API   Tabular Data
             |
             v
      Price Prediction
+
+flowchart TB
+  A[Property Location (Lat/Lng)]
+  A --> B[Satellite API]
+  A --> C[Tabular Data<br/>(sqft, beds, year, ...)]
+  B --> D[ResNet-18 → CNN embeddings]
+  C --> E[Tabular features → encoder]
+  D --> F[Fusion / MLP]
+  E --> F
+  F --> G[Price prediction]
+
