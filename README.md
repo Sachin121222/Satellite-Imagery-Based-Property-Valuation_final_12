@@ -243,10 +243,50 @@ in the project report (`23116085_report.pdf`).
 
 #### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/satellite-property-valuation.git
+git clone https://github.com/Sachin121222/Satellite-Imagery-Based-Property-Valuation_final_12.git
 cd satellite-property-valuation
+```
+#### 2. Create virtual environment
+```bash
+python -m venv venv
+```
+### Activate the environment:
+### Linux / macOS
+```bash
+source venv/bin/activate
+```
+### Windows
+```bash
+source venv/bin/activate
+```
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+### Satellite API Configuration (Optional)
+To enable satellite image downloading, create a .env file in the project root:
+```bash
+MAPBOX_TOKEN=your_mapbox_api_key_here
+```
+### Download Satellite Images (Optional)
+```bash
+python src/data_fetcher.py
+```
+Note: Satellite images are not included in the repository due to
+storage limitations and external API constraints.
 
+## ▶️ Usage
 
+### 🔹 Execution Order
 
+Run the Jupyter notebooks in the following sequence to perform the complete analysis pipeline:
 
+| Notebook | Description |
+|---------|-------------|
+| `1_preprocesssing.ipynb` | Data cleaning and exploratory data analysis |
+| `2_model_tabular_data.ipynb` | Baseline tabular model development |
+| `3_model_image_only.ipynb` | CNN-based model using satellite images |
+| `4_model_fusion(image+tabular).ipynb` | Multimodal fusion approach |
+| `5_gradcam_application.ipynb` | Model interpretation and Grad-CAM visualization |
+| `6_evaluation_and_prediction.ipynb` | Comparative analysis and final results |
 
