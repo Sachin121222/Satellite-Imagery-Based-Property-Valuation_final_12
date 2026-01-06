@@ -92,4 +92,86 @@ flowchart TB
   D --> F[Fusion / MLP]
   E --> F
   F --> G[Price prediction]
+```
 
+⚙ Pipeline steps (detailed)
+
+Data ingestion
+
+Load tabular dataset containing sale price and property features (sqft, bedrooms, bathrooms, year built, lat/long, waterfront, view, etc.).
+
+Sampling & stratification
+
+Optionally stratify properties by log(price) to collect image tiles across full price distribution.
+
+Satellite imagery acquisition
+
+Given (lat, lon) fetch tiles at a fixed zoom/size from a provider (Mapbox, Google Static Maps, or other).
+
+Cache images locally (data/images/) and store metadata (zoom, timestamp).
+
+Note: images are excluded from repo due to size & API limits.
+
+Preprocessing
+
+Tabular: impute, log-transform price target, scale numeric features, encode categoricals.
+
+Images: resize (224×224), normalize per pretrained network spec.
+
+Feature extraction
+
+Use pretrained ResNet-18 (remove classification head) to get 512-d embeddings. Initially freeze weights.
+
+Modeling
+
+Tabular-only: gradient boosting (LightGBM / XGBoost) on structured features.
+
+Image-only: MLP on CNN embeddings.
+
+Multimodal (early-fusion): concatenate standardized tabular features + image embeddings → MLP regressor.
+
+Training & evaluation
+
+Loss: MSE on log(price).
+
+Metrics: RMSE (original price scale), R².
+
+Validation: k-fold or holdout; consider spatial grouping to avoid leakage.
+
+Explainability
+
+Apply Grad-CAM to CNN activations and overlay heatmaps on tiles to inspect model attention.
+
+📂 Data & preprocessing
+
+Tabular features (examples): sqft_living, sqft_lot, bedrooms, bathrooms, condition, grade, year_built, lat, long, sqft_living15, sqft_lot15, waterfront, view.
+
+Target: sale price (log-transformed for modeling).
+
+Image acquisition notes: collect tiles at consistent zoom; store mapping id → image_path in CSV.
+
+Preprocessing specifics: missing numeric values — median imputation; categorical — one-hot or target encoding; standardize using training set statistics.
+
+(Report includes example images for low/high priced areas — see report visuals.) 
+
+23116085_report
+
+🧪 Models implemented
+
+Tabular Baseline
+
+Model: Gradient boosting regressor (preferred for tabular tasks).
+
+Role: baseline benchmark.
+
+Image-Only
+
+Backbone: ResNet-18 (pretrained), embeddings → MLP.
+
+Purpose: measure visual signal alone.
+
+Multimodal Fusion
+
+Strategy: early fusion (concatenate tabular features + image embeddings) → MLP.
+
+Note: Simple concatenation was used; more advanced fusion (attention/late-fusion) is recommended for future work.
