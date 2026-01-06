@@ -290,3 +290,21 @@ Run the Jupyter notebooks in the following sequence to perform the complete anal
 | `5_gradcam_application.ipynb` | Model interpretation and Grad-CAM visualization |
 | `6_evaluation_and_prediction.ipynb` | Comparative analysis and final results |
 
+### Generating Predictions
+Final test predictions are saved to:
+```bash
+outputs/predictions.csv
+```
+File format:
+```bash
+id,predicted_price
+1,20
+```
+## ⚠️ Notes and Limitations
+
+- Satellite imagery is used as **complementary neighborhood context**, not as a primary predictive signal.
+- The current multimodal fusion strategy relies on **simple feature concatenation**; more advanced fusion methods (e.g., attention-based or late-fusion architectures) may yield better performance.
+- Satellite image acquisition depends on **third-party APIs** and may be subject to usage limits or rate restrictions.
+- The project places strong emphasis on **model interpretability** (using Grad-CAM) in addition to raw predictive performance.
+
+
