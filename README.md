@@ -78,7 +78,7 @@ satellite-property-valuation/
 │   └── predictions.csv         # Final results
 └── README.md
 ```
-
+---
 ## 🔁 Pipeline (visual + code-style)
 
 ### Monospace pipeline (suitable for README)
