@@ -177,6 +177,30 @@ in the project report (`23116085_report.pdf`).
 - Concatenate standardized tabular features with image embeddings
 - Pass combined features through an MLP regressor
 
+## 🧪 Models Implemented
+
+### 1️⃣ Tabular Baseline
+- **Model:** Gradient Boosting Regressor
+- **Purpose:** Performance benchmark
+- **Observation:** Best performing approach
+
+
+### 2️⃣ Image-Only Model
+- **Backbone:** Pretrained ResNet-18
+- **Architecture:** CNN embeddings → MLP
+- **Purpose:** Measure standalone predictive signal from imagery
+
+
+### 3️⃣ Multimodal Fusion Model
+- **Strategy:** Early fusion (feature concatenation)
+- **Architecture:** Tabular features + image embeddings → MLP
+- **Note:** Simple concatenation was used; more advanced fusion techniques
+(attention-based or late-fusion) are recommended for future work.
+## 📈 Results
+
+**Evaluation Metrics**
+- **RMSE** computed on the original price scale  
+- **R²** score to measure explained variance  
 ---
 
 ### 7. Training & Evaluation
@@ -196,33 +220,6 @@ in the project report (`23116085_report.pdf`).
 - Helps verify whether the model focuses on meaningful neighborhood features.
 
 ---
-
-## 🧪 Models Implemented
-
-### 1️⃣ Tabular Baseline
-- **Model:** Gradient Boosting Regressor
-- **Purpose:** Performance benchmark
-- **Observation:** Best performing approach
-
----
-
-### 2️⃣ Image-Only Model
-- **Backbone:** Pretrained ResNet-18
-- **Architecture:** CNN embeddings → MLP
-- **Purpose:** Measure standalone predictive signal from imagery
-
----
-
-### 3️⃣ Multimodal Fusion Model
-- **Strategy:** Early fusion (feature concatenation)
-- **Architecture:** Tabular features + image embeddings → MLP
-- **Note:** Simple concatenation was used; more advanced fusion techniques
-(attention-based or late-fusion) are recommended for future work.
-## 📈 Results
-
-**Evaluation Metrics**
-- **RMSE** computed on the original price scale  
-- **R²** score to measure explained variance  
 
 ### Model Performance
 
